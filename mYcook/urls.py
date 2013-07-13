@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'mYcook.views.home', name='home'),
     # url(r'^mYcook/', include('mYcook.foo.urls')),
+    url(r'^ask', 'mYcook.views.ask', name='home'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
