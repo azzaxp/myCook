@@ -56,9 +56,15 @@ def how(request, offset):
     res = mechanize.urlopen(url)
     page = ''.join(str(line) for line in res)
     results = json.loads(page)
+    name = results['name']
+    youtube_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20%2A%20from%20youtube.search%20where%20query%3D%22"+str(name)+"%22%20limit%201&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+    you_res = mechanize.urlopen(youtube_URL)
+    youpage = ''.join(str(line) for line in you_res)
+    youres  = json.loads(youpage)
     return render_to_response("cook.html",{
         'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
             'source': results['source'], 'type': results['attributes'], 'estimated': results['totalTimeInSeconds'], 'image': results['images'][0]['hostedLargeUrl'],
+             'youtube': youres['query']['results']['video']['id']
         }, context_instance=RequestContext(request))
 
 
