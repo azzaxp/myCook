@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>mY!cook</title>
+<link rel="stylesheet" href="/static/css/pure-min.css">
+<link rel="stylesheet" href="/static/css/small_main.css"> 
+    <style>
+    html, body {
+  height: 100%;
+}
+
+#map-canvas, #map_canvas {
+  height: 100%;
+}
+
+@media print {
+  html, body {
+    height: auto;
+  }
+
+  #map-canvas, #map_canvas {
+    height: auto;
+  }
+}
+	</style>
+	<script src="/static/js/ajf8ggy.js"></script>
+<script>
+    try { Typekit.load(); } catch (e) {}
+</script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places"></script>
+    <script>
+var map;
+var infowindow;
+
+function initialize(position) {
+  var pyrmont = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+  map = new google.maps.Map(document.getElementById('map-canvas'), {
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: pyrmont,
+    zoom: 15
+  });
+
+  var request = {
+    location: pyrmont,
+    radius: 1000,
+    types: ['restaurant']
+  };
+  infowindow = new google.maps.InfoWindow();
+  var service = new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, callback);
+}
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(place.name);
+    infowindow.open(map, this);
+  });
+}
+
+
+function error(msg) {
+  return false;
+}
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(initialize, error);
+} else {
+  error('not supported');
+}
+
+    </script>
+  </head>
+  <body>
+<div align = "center" id="map-canvas"></div>
+    
+    <div class="pure-g-r " id="layout">
+        <a href="#menu" id="menuLink" class="pure-menu-link">
+    <img src="/static/img/navicon-png2x.png" width="20"
+         alt="Menu toggle">
+</a>
+
+<div class="pure-u" id="menu">
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading" href="/">mY!Cook</a>
+
+        <ul>
+          
+            <li class=" ">
+                <a href="/">Search</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/ask">Ask Friends</a>
+            </li>
+          
+            <li class="pure-menu-selected">
+                <a href="/where">Where do I eat?</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/how">How do I cook?</a>
+            </li>
+          
+            <li class=" menu-item-divided">
+                <a href="/thanks">Enjoy!</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,6 +1,77 @@
-<table>
-	{% for result in search_results %}
-		<tr><td>{{result.recipeName}}</td></tr>
-	{% endfor %}
-	<tr></tr>
-</table>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>mY!cook</title>
+
+<link rel="stylesheet" href="/static/css/pure-min.css">
+<link rel="stylesheet" href="/static/css/small_main.css">  
+<script src="/static/js/ajf8ggy.js"></script>
+<script>
+    try { Typekit.load(); } catch (e) {}
+</script>
+</head>
+<body>
+
+    <div class="pure-g-r " id="layout">
+        <a href="#menu" id="menuLink" class="pure-menu-link">
+    <img src="/static/img/navicon-png2x.png" width="20"
+         alt="Menu toggle">
+</a>
+
+<div class="pure-u" id="menu">
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading" href="/">mY!Cook</a>
+
+        <ul>
+          
+            <li class="pure-menu-selected">
+                <a href="/">Search</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/ask">Ask Friends</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/where">Where do I eat?</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/how">How do I cook?</a>
+            </li>
+          
+            <li class=" menu-item-divided">
+                <a href="/thanks">Enjoy!</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="pure-u" id="main">
+
+<div class="header pure-u-1">
+    <h1 class="pure-u-1">You searched for: {{ term }}</h1>  
+</div>
+<br>
+	<div class="content pure-u-1">
+		<div class="pure-g-r">
+			{% for result in search_results|slice:":30" %}
+				<div class="pure-u-1-3 photo-box">
+                <a href="http://www.yummly.com/recipe/{{ result.id }}">
+                    {% for image in result.smallImageUrls|slice:":1" %}
+                    <img src="{{ image }}" width = 276 height = 200
+                         alt="{{ result.recipeName }}">
+                    {% endfor %}
+                </a>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+</body>
+</html>
+
