@@ -25,8 +25,10 @@ def ask(request):
 def get(request, offset):
     import mechanize
     import json
-
-    url = 'http://api.yummly.com/v1/api/recipes?_app_id=%s&_app_key=%s&allowedIngredient[]=%s&requirePictures=true' % (APP_ID, APP_KEY, offset)
+    s = ''
+    for word in offset.split('+'):
+        s+= "&allowedIngredient[]=%s" % (word)
+    url = 'http://api.yummly.com/v1/api/recipes?_app_id=%s&_app_key=%s%s&requirePictures=true' % (APP_ID, APP_KEY, s)
     res = mechanize.urlopen(url)
     page = ''.join(str(line) for line in res)
     result = json.loads(page)
@@ -48,7 +50,7 @@ def how(request, offset):
     import json
     import mechanize
     if offset == '':
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/help/')
 
     url = 'http://api.yummly.com/v1/api/recipe/%s?_app_id=%s&_app_key=%s' % (offset, APP_ID, APP_KEY)
     res = mechanize.urlopen(url)
@@ -58,3 +60,17 @@ def how(request, offset):
         'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
             'source': results['source'], 'type': results['attributes'], 'estimated': results['totalTimeInSeconds'], 'image': results['images'][0]['hostedLargeUrl'],
         }, context_instance=RequestContext(request))
+
+
+def thanks(request):
+    return render_to_response("thanks.html", {
+        }, context_instance = RequestContext(request))
+
+
+def help(request):
+    return render_to_response("home.html", {
+        'err': 'Please search below and select a recipe to see how to cook!',
+        }, context_instance = RequestContext(request))
+
+def recommend(request):
+    return HttpResponse("Recommend something!")

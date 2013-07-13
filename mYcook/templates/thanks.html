@@ -51,7 +51,7 @@
 
         <ul>
           
-            <li class="pure-menu-selected">
+            <li class=" ">
                 <a href="/">Search</a>
             </li>
           
@@ -63,7 +63,7 @@
                 <a href="/how">Help me cook</a>
             </li>
           
-            <li class=" menu-item-divided">
+            <li class=" pure-menu-selected">
                 <a href="/thanks">Enjoy!</a>
             </li>
 
@@ -74,33 +74,9 @@
 <div class="pure-u" id="main">
 
 <div class="hero">
-    <h1 class="pure-u-1">mY!Cook</h1>
-    {% if err %}
-    <div>
-    <style scoped>
-        .pure-button-warning{
-            color: white;
-            border-radius: 4px;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-        }
-        .pure-button-warning {
-            background: rgb(223, 117, 20); /* this is an orange */
-        }
-    </style>
-    <button class="pure-button pure-button-warning">{{ err }}</button>
-	</div>
-    {% endif %}
-    <h2 class="pure-u-3-4 l-centered">Have the ingredients, but not sure what to cook? <br>
-    Well, we can help!</h2>
-    
-    <div class="hero-cta pure-u-3-4">
-		<form class="pure-form" action="/" method="post">
-			{% csrf_token %}
-			<input class="pure-input-2-3" type="text" name="search_key" placeholder="Type your ingredients here separated by a space!" onkeypress="return onlyAlphabets(event,this);"><br>
-			<br>
-			<button class="pure-button pure-button-primary">Surprise Me!</button>
-		 </form>
-    </div>
+    <h1 class="pure-u-1">peacemax</h1>
+    <h2 class="pure-u-3-4 l-centered">Sreyanth and Nitish<br><br>
+    Thank you!</h2>
 </div>
  <script src="/static/js/rainbow.js"></script>
 </body>
