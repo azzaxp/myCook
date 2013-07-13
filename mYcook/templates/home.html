@@ -13,6 +13,28 @@
 <script>
     try { Typekit.load(); } catch (e) {}
 </script>
+<script language="Javascript" type="text/javascript">
+ 
+        function onlyAlphabets(e, t) {
+            try {
+                if (window.event) {
+                    var charCode = window.event.keyCode;
+                }
+                else if (e) {
+                    var charCode = e.which;
+                }
+                else { return true; }
+                if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) ||charCode == 13 || charCode == 32)
+                    return true;
+                else
+                    return false;
+            }
+            catch (err) {
+                alert(err.Description);
+            }
+        }
+ 
+    </script>
 </head>
 <body>
 
@@ -60,8 +82,9 @@
     Well, we can help!</h2>
     
     <div class="hero-cta pure-u-3-4">
-		<form class="pure-form">
-			<input class="pure-input-2-3" type="text" name="search_key" placeholder="Type your key ingredient here!"><br>
+		<form class="pure-form" action="" method="post">
+			{% csrf_token %}
+			<input class="pure-input-2-3" type="text" name="search_key" placeholder="Type your key ingredient here!" onkeypress="return onlyAlphabets(event,this);"><br>
 			<br>
 			<button class="pure-button pure-button-primary">Surprise Me!</button>
 		 </form>
