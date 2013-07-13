@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^ask', 'mYcook.views.ask', name='home'),
     url(r'^get/([A-Za-z+ ]*)', 'mYcook.views.get', name='home'),
     url(r'^where', 'mYcook.views.where', name='home'),
-    url(r'^how/([A-Za-z+ ]*)', 'mYcook.views.how', name='home'),
+    url(r'^how/([A-Za-z0-9\- ]*)', 'mYcook.views.how', name='home'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
