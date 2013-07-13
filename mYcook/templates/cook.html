@@ -7,11 +7,34 @@
 <title>mY!cook</title>
 
 <link rel="stylesheet" href="/static/css/pure-min.css">
-<link rel="stylesheet" href="/static/css/small_main.css">  
+<link rel="stylesheet" href="/static/css/small_main.css">
 <script src="/static/js/ajf8ggy.js"></script>
 <script>
     try { Typekit.load(); } catch (e) {}
 </script>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['gauge']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Sweet', parseInt(parseFloat({{ flavors.Sweet }}) * 100)],
+          ['Sour', parseInt(parseFloat({{ flavors.Sour }}) * 100)],
+          ['Salty', parseInt(parseFloat({{ flavors.Salty }}) * 100)]
+        ]);
+
+        var options = {
+          width: 400, height: 120,
+          redFrom: 70, redTo: 100,
+          yellowFrom:50, yellowTo: 70,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 <body>
 
@@ -27,19 +50,15 @@
 
         <ul>
           
-            <li class="pure-menu-selected">
-                <a href="/">Search</a>
-            </li>
-          
             <li class=" ">
-                <a href="/ask">Ask Friends</a>
+                <a href="/">Search</a>
             </li>
           
             <li class=" ">
                 <a href="/where">Where do I eat?</a>
             </li>
           
-            <li class=" ">
+            <li class="pure-menu-selected">
                 <a href="/how">How do I cook?</a>
             </li>
           
@@ -52,13 +71,37 @@
 </div>
 
 <div class="pure-u" id="main">
-
 <div class="header pure-u-1">
-    <h1 class="pure-u-1">You searched for: {{ term }}</h1>  
+    <h1 class="pure-u-1">{{ name }}</h1>  
 </div>
 <br>
 	<div class="content pure-u-1">
-		{{ result }}
+		<div class="pure-g-r">
+			<div class="pure-u-3-5">
+				<h3>
+				<img src={{ image }} width = 450 alt="{{ name }}">
+				</h3>
+			<h3>Flavors</h3>
+				<div id='chart_div'></div>
+			</div>
+			<div class="pure-u-2-5">
+				<h3>Ingredients</h3>
+				<ul>
+					{% for line in ingredients %}
+					<li>{{ line }}</li>
+					{% endfor %}
+				</ul>
+				<strong>Rating:</strong> {{ rating }}<br>
+				<strong>Serves:</strong> {{ serves }}<br><br>
+				<a class="pure-button pure-button-primary" href={{ source.sourceRecipeUrl }}>How to?</a>
+				<a class="pure-button pure-button-primary" href="/where/">Or eat nearby!</a>
+				<h3>Recommendations</h3>
+				<a class="pure-button pure-button-primary" href="/enjoy/">Cool, But should I eat this?</a>
+			</div>
+			<div class="pure-u-1-5">
+				
+			</div>
+		</div>
 	</div>
 
 </body>

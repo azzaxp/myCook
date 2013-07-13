@@ -45,6 +45,7 @@ def where(request):
         }, context_instance=RequestContext(request))
 
 def how(request, offset):
+    import json
     import mechanize
     if offset == '':
         return HttpResponseRedirect('/')
@@ -52,6 +53,8 @@ def how(request, offset):
     url = 'http://api.yummly.com/v1/api/recipe/%s?_app_id=%s&_app_key=%s' % (offset, APP_ID, APP_KEY)
     res = mechanize.urlopen(url)
     page = ''.join(str(line) for line in res)
+    results = json.loads(page)
     return render_to_response("cook.html",{
-        'result': page,
+        'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
+            'source': results['source'], 'type': results['attributes'], 'estimated': results['totalTimeInSeconds'], 'image': results['images'][0]['hostedLargeUrl'],
         }, context_instance=RequestContext(request))
