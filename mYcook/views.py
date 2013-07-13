@@ -1,5 +1,6 @@
 # mYcook views will come here
 
+import requests
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -26,17 +27,39 @@ def get(request, offset):
     import mechanize
     import json
 
+    def filter(URL):
+        newURL = URL.replace(".s.jpg", ".730x410.jpg")
+        resp = requests.head(newURL)
+        if resp.status_code != 200:
+            return URL
+        return newURL
+
     url = 'http://api.yummly.com/v1/api/recipes?_app_id=%s&_app_key=%s&allowedIngredient[]=%s&requirePictures=true' % (APP_ID, APP_KEY, offset)
     res = mechanize.urlopen(url)
     page = ''.join(str(line) for line in res)
-    # page = page.replace("u'http://i.yummly.com/", "http://yummly-recipeimages-compressed.s3.amazonaws.com/")
-    # page = page.replace(".s.jpg", ".730x410.jpg")
     result = json.loads(page)
-    return render_to_response("print.html", {
-    'search_results' : result['matches'], 'term': offset.replace('+', ' ').title(),
+    results = []
+
+    for re in result['matches']:
+        re['smallImageUrls'] = [filter(re['smallImageUrls'][0])]
+        results.append(re)
+    return render_to_response("search.html", {
+    'search_results' : results, 'term': offset.replace('+', ' ').title(),
         }, context_instance=RequestContext(request))
 
 
 def where(request):
     return render_to_response("where.html", {
+        }, context_instance=RequestContext(request))
+
+def how(request, offset):
+    import mechanize
+    if offset == '':
+        return HttpResponseRedirect('/')
+
+    url = 'http://api.yummly.com/v1/api/recipe/%s' % (offset)
+    res = mechanize.urlopen(url)
+    page = ''.join(str(line) for line in res)
+    return render_to_response("cook.html",{
+        'result': page,
         }, context_instance=RequestContext(request))
