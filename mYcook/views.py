@@ -61,10 +61,14 @@ def how(request, offset):
     you_res = mechanize.urlopen(youtube_URL)
     youpage = ''.join(str(line) for line in you_res)
     youres  = json.loads(youpage)
+    if youres['query']['count'] > 0:
+        youtube = youres['query']['results']['video']['id']
+    else:
+        youtube = ''
     return render_to_response("cook.html",{
         'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
             'source': results['source'], 'type': results['attributes'], 'estimated': results['totalTimeInSeconds'], 'image': results['images'][0]['hostedLargeUrl'],
-             'youtube': youres['query']['results']['video']['id']
+             'youtube': youtube
         }, context_instance=RequestContext(request))
 
 
