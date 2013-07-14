@@ -25,9 +25,15 @@ def ask(request):
 def get(request, offset):
     import mechanize
     import json
-    s = ''
-    for word in offset.split('+'):
+    allow = offset
+    dont_allow = ''
+    if '+not+' in offset:
+        [allow, dont_allow] = offset.split('+not+')
+    s= ''
+    for word in allow.split('+'):
         s+= "&allowedIngredient[]=%s" % (word)
+    for word in dont_allow.split('+'):
+        s+= "&excludeIngredient[]=%s" % (word)
     url = 'http://api.yummly.com/v1/api/recipes?_app_id=%s&_app_key=%s%s&requirePictures=true' % (APP_ID, APP_KEY, s)
     res = mechanize.urlopen(url)
     page = ''.join(str(line) for line in res)
@@ -61,18 +67,33 @@ def how(request, offset):
     page = ''.join(str(line) for line in res)
     results = json.loads(page)
     name = results['name']
-    youtube_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20%2A%20from%20youtube.search%20where%20query%3D%22"+str(name)+"%22%20limit%201&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
-    you_res = mechanize.urlopen(youtube_URL)
-    youpage = ''.join(str(line) for line in you_res)
-    youres  = json.loads(youpage)
-    if youres['query']['count'] > 0:
-        youtube = youres['query']['results']['video']['id']
-    else:
-        youtube = ''
+    youtube = ''
+    try:
+        youtube_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20%2A%20from%20youtube.search%20where%20query%3D%22"+"cooking "+str(name)+"%22%20limit%201&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+        you_res = mechanize.urlopen(youtube_URL)
+        youpage = ''.join(str(line) for line in you_res)
+        youres  = json.loads(youpage)
+
+        if youres['query']['count'] > 0:
+            youtube = youres['query']['results']['video']['id']
+    except:
+        pass
+
+    answers = ''
+
+    answers_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20%2A%20from%20answers.search%20where%20query%3D%22"+ str(name) +"%22%20and%20type%3D%22resolved%22%20limit%204&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
+    ans_res = mechanize.urlopen(answers_URL)
+    anspage = ''.join(str(line) for line in ans_res)
+    ansres  = json.loads(anspage)
+
+    if ansres['query']['count'] > 0:
+        answers = ansres['query']['results']['Question']
+
+
     return render_to_response("cook.html",{
         'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
             'source': results['source'], 'type': results['attributes'], 'estimated': results['totalTimeInSeconds'], 'image': results['images'][0]['hostedLargeUrl'],
-             'youtube': youtube, 'nutrition': results['nutritionEstimates'],
+             'youtube': youtube, 'nutrition': results['nutritionEstimates'], 'answers': answers,
         }, context_instance=RequestContext(request))
 
 

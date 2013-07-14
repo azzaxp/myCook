@@ -19,9 +19,9 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['Sweet', parseInt(parseFloat({{ flavors.Sweet }}) * 100)],
-          ['Sour', parseInt(parseFloat({{ flavors.Sour }}) * 100)],
-          ['Salty', parseInt(parseFloat({{ flavors.Salty }}) * 100)]
+          ['Sweet', parseInt(parseFloat({{ flavors.Sweet }}) * 2000)],
+          ['Sour', parseInt(parseFloat({{ flavors.Sour }}) * 2000)],
+          ['Salty', parseInt(parseFloat({{ flavors.Salty }}) * 4000)]
         ]);
 
         var options = {
@@ -83,9 +83,18 @@
 				</h3>
 				<h3>Flavors</h3>
 				<div id='chart_div'></div>
+								
 				{% if youtube %}
-				<h3>See and Do!</h3>
+				<h3>Related Videos</h3>
 				<iframe width="450" height="253" src="http://www.youtube.com/embed/{{ youtube }}" frameborder="0" allowfullscreen></iframe>
+				{% endif %}
+				{% if answers %}
+				<h3>See what others asked about this recipe</h3>
+				<ul>
+				{% for answer in answers %}
+					<li><a href={{ answer.Link }}>{{ answer.Subject }}</a></li>
+				{% endfor %}
+				</ul>
 				{% endif %}
 			</div>
 			<div class="pure-u-2-5">
@@ -98,7 +107,7 @@
 				<strong>Rating:</strong> {{ rating }}<br>
 				<strong>Serves:</strong> {{ serves }}<br>
 				{% if type %}
-				<strong>Type:</strong> {{ type }} seconds<br>
+				<strong>Type:</strong> {{ type }}<br>
 				{% endif %}
 				{% if estimated %}
 				<strong>Estimated Time:</strong> {{ totalTimeInSeconds }} seconds<br>
@@ -108,6 +117,18 @@
 				<a class="pure-button pure-button-primary" href="/where/">Or eat nearby!</a>
 				<h3>Recommendations</h3>
 				<a class="pure-button pure-button-primary" href="/enjoy/">Cool, But should I eat this?</a>
+				
+				<h3>Nutritional Values</h3>
+				<table class="pure-table">
+					<thead>
+					<tr><th>Description</th><th>Value</th><th>Unit</th></tr>
+					</thead>
+					<tbody>
+				{% for item in nutrition %}
+					<tr><td>{{ item.description }}</td><td>{{ item.value }}</td><td>{{ item.unit.abbreviation }}</td></tr>
+				{% endfor %}
+					</tbody>
+				</table>
 			</div>
 			<div class="pure-u-1-5">
 				
