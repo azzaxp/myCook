@@ -80,15 +80,16 @@ def how(request, offset):
         pass
 
     answers = ''
+    try:
+        answers_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20%2A%20from%20answers.search%20where%20query%3D%22"+ str(name) +"%22%20and%20type%3D%22resolved%22%20limit%204&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
+        ans_res = mechanize.urlopen(answers_URL)
+        anspage = ''.join(str(line) for line in ans_res)
+        ansres  = json.loads(anspage)
 
-    answers_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20%2A%20from%20answers.search%20where%20query%3D%22"+ str(name) +"%22%20and%20type%3D%22resolved%22%20limit%204&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
-    ans_res = mechanize.urlopen(answers_URL)
-    anspage = ''.join(str(line) for line in ans_res)
-    ansres  = json.loads(anspage)
-
-    if ansres['query']['count'] > 0:
-        answers = ansres['query']['results']['Question']
-
+        if ansres['query']['count'] > 0:
+            answers = ansres['query']['results']['Question']
+    except:
+        pass
 
     return render_to_response("cook.html",{
         'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
@@ -108,4 +109,5 @@ def help(request):
         }, context_instance = RequestContext(request))
 
 def recommend(request):
-    return HttpResponse("Recommend something!")
+    return render_to_response("recommend.html", {
+        }, context_instance = RequestContext(request))
