@@ -36,9 +36,13 @@ def get(request, offset):
 
     for re in result['matches']:
         re['smallImageUrls'] = [re['smallImageUrls'][0].replace('.s.', '.l.')]
+        name = re['recipeName']
+        if len(name)>40:
+            name = name[:37]+"..."
+        re['recipeName'] = name
         results.append(re)
     return render_to_response("search.html", {
-    'search_results' : results, 'term': offset.replace('+', ' ').title(),
+    'search_results' : results, 'term': offset.replace('+', ', ').title(),
         }, context_instance=RequestContext(request))
 
 
@@ -68,7 +72,7 @@ def how(request, offset):
     return render_to_response("cook.html",{
         'flavors': results['flavors'], 'ingredients': results['ingredientLines'], 'name': results['name'], 'rating': results['rating'], 'serves': results['numberOfServings'],
             'source': results['source'], 'type': results['attributes'], 'estimated': results['totalTimeInSeconds'], 'image': results['images'][0]['hostedLargeUrl'],
-             'youtube': youtube
+             'youtube': youtube, 'nutrition': results['nutritionEstimates'],
         }, context_instance=RequestContext(request))
 
 

@@ -96,7 +96,14 @@
 					{% endfor %}
 				</ul>
 				<strong>Rating:</strong> {{ rating }}<br>
-				<strong>Serves:</strong> {{ serves }}<br><br>
+				<strong>Serves:</strong> {{ serves }}<br>
+				{% if type %}
+				<strong>Type:</strong> {{ type }} seconds<br>
+				{% endif %}
+				{% if estimated %}
+				<strong>Estimated Time:</strong> {{ totalTimeInSeconds }} seconds<br>
+				{% endif %}
+				<br>
 				<a class="pure-button pure-button-primary" href={{ source.sourceRecipeUrl }}>How to?</a>
 				<a class="pure-button pure-button-primary" href="/where/">Or eat nearby!</a>
 				<h3>Recommendations</h3>
