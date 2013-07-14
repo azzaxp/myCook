@@ -117,7 +117,7 @@
 				<a class="pure-button pure-button-primary" href="/where/">Or eat nearby!</a>
 				<h3>Recommendations</h3>
 				<a class="pure-button pure-button-primary" href="/enjoy/">Cool, But should I eat this?</a>
-				
+				{% if nutrition%}
 				<h3>Nutritional Values</h3>
 				<table class="pure-table">
 					<thead>
@@ -129,6 +129,7 @@
 				{% endfor %}
 					</tbody>
 				</table>
+				{% endif %}
 			</div>
 			<div class="pure-u-1-5">
 				
