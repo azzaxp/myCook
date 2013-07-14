@@ -368,7 +368,8 @@ p {
     margin: 6em 0 3em;
 }
     .hero h1 {
-        font-size: 600%;
+	   font-family: "omnes-pro",sans-serif;
+        font-size: 1000%;
         margin: 0;
         padding: 0;
         color: #1f8dd6;
